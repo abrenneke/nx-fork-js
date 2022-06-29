@@ -11,9 +11,8 @@ const run_type_check_1 = require("../typescript/run-type-check");
 const dir_1 = require("@swc/cli/lib/swc/dir");
 const core_1 = require("@swc/core");
 const compileDirWithSwc = dir_1.default;
-function getSwcCmd({ swcCli, swcrcPath, srcPath, destPath }, watch = false) {
-    let swcCmd = `${swcCli} ${srcPath} -d ${destPath} --no-swcrc --config-file=${swcrcPath}`;
-    console.log(swcCmd);
+function getSwcCmd({ swcrcPath, srcPath, destPath }, watch = false) {
+    let swcCmd = `npx swc ${srcPath} -d ${destPath} --no-swcrc --config-file=${swcrcPath}`;
     return watch ? swcCmd.concat(' --watch') : swcCmd;
 }
 function getTypeCheckOptions(normalizedOptions) {
