@@ -59,16 +59,11 @@ export interface SwcExecutorOptions extends ExecutorOptions {
   swcExclude?: string[];
 }
 
-export interface SwcCliOptions {
-  srcPath: string;
-  destPath: string;
-  swcrcPath: string;
-  swcCwd: string;
-}
-
 export interface NormalizedSwcExecutorOptions
   extends NormalizedExecutorOptions {
   swcExclude: string[];
   skipTypeCheck: boolean;
-  swcCliOptions: SwcCliOptions;
+  sourceDir: string;
+  outDir: string;
+  swcrcPath: string;
 }

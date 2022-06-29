@@ -22,23 +22,9 @@ function normalizeOptions(options, contextRoot, sourceRoot, projectRoot) {
         options.watch = false;
     }
     const files = (0, assets_1.assetGlobsToFiles)(options.assets, contextRoot, outputPath);
-    const projectRootParts = projectRoot.split('/');
-    // We pop the last part of the `projectRoot` to pass
-    // the last part (projectDir) and the remainder (projectRootParts) to swc
-    const projectDir = projectRootParts.pop();
-    // default to current directory if projectRootParts is [].
-    // Eg: when a project is at the root level, outside of layout dir
-    const swcCwd = projectRootParts.join('/') || '.';
-    const swcrcPath = (0, get_swcrc_path_1.getSwcrcPath)(options, contextRoot, projectRoot);
-    const swcCliOptions = {
-        srcPath: projectDir,
-        destPath: (0, path_1.relative)((0, path_1.join)(contextRoot, swcCwd), outputPath),
-        swcCwd,
-        swcrcPath,
-    };
     return Object.assign(Object.assign({}, options), { mainOutputPath: (0, path_1.resolve)(outputPath, options.main.replace(`${projectRoot}/`, '').replace('.ts', '.js')), files, root: contextRoot, sourceRoot,
         projectRoot,
-        outputPath, tsConfig: (0, path_1.join)(contextRoot, options.tsConfig), swcCliOptions });
+        outputPath, tsConfig: (0, path_1.join)(contextRoot, options.tsConfig), sourceDir: (0, path_1.resolve)(contextRoot, projectRoot), outDir: (0, path_1.resolve)(contextRoot, outputPath), swcrcPath: (0, get_swcrc_path_1.getSwcrcPath)(options, contextRoot, projectRoot) });
 }
 exports.normalizeOptions = normalizeOptions;
 function processAssetsAndPackageJsonOnce(assetHandler, options, context, target, dependencies) {
@@ -59,7 +45,7 @@ function swcExecutor(_options, context) {
         if (!options.skipTypeCheck) {
             (0, check_dependencies_1.checkDependencies)(context, options.tsConfig);
         }
-        const swcHelperDependency = (0, compiler_helper_dependency_1.getHelperDependency)(compiler_helper_dependency_1.HelperDependency.swc, options.swcCliOptions.swcrcPath, dependencies);
+        const swcHelperDependency = (0, compiler_helper_dependency_1.getHelperDependency)(compiler_helper_dependency_1.HelperDependency.swc, options.swcrcPath, dependencies);
         if (swcHelperDependency) {
             dependencies.push(swcHelperDependency);
         }
